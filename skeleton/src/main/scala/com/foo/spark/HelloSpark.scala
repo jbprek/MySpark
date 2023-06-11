@@ -2,6 +2,7 @@ package com.foo.spark
 
 import org.apache.log4j.Logger
 import org.apache.spark.SparkConf
+import org.apache.spark.sql.Dataset
 import org.apache.spark.sql.{DataFrame, SparkSession}
 
 import java.util.Properties
@@ -13,6 +14,9 @@ object HelloSpark extends Serializable {
 
   def main(args: Array[String]): Unit = {
 
+
+
+
     if (args.length == 0) {
       logger.error("Usage: HelloSpark filename")
       System.exit(1)
@@ -23,6 +27,14 @@ object HelloSpark extends Serializable {
       .config(getSparkAppConf)
       .getOrCreate()
     //logger.info("spark.conf=" + spark.conf.getAll.toString())
+
+
+    import spark.implicits._
+    val df1 = Seq(1, 2).toDF
+
+    case class A(id: Int)
+
+    var a: Dataset[A] = null
 
     val surveyRawDF = loadSurveyDF(spark, args(0))
     val partitionedSurveyDF = surveyRawDF.repartition(2)
